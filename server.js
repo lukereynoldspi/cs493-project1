@@ -3,17 +3,21 @@ const shortid = require('shortid');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express()
-const port = 3003
+const port = 3000
 
 let businesses = [
-  {name:"Luke Inc.", 
+  {
+  id: "owo",
+  name:"Luke Inc.", 
   address:"Bruh Rd.", 
   city:"Bend", 
   state:"OR", 
   zipCode:"12345", 
   phoneNumber:"(541) 555-5555", 
   category:"Technology", 
-  subcategory:"Software"}
+  subcategory:"Software",
+  website:"lukereynoldspi.github.io",
+  email:"lukereynoldspi@gmail.com"}
 ];
 
 app.use(cors());
@@ -33,11 +37,14 @@ app.post('/businesses', (req, res) => {
     zipCode: req.body.zipCode,
     phoneNumber: req.body.phoneNumber,
     category: req.body.category,
-    subcategory: req.body.subcategory
+    subcategory: req.body.subcategory,
+
+    // Optional parameters
+    website: req.body.website || '',
+    email: req.body.email || '',
   };
   
   businesses.push(business);
-
   console.log(businesses);
   res.send('Business is added to the database');
 });
@@ -55,8 +62,25 @@ app.put('/businesses/:id', (req, res) => {
     business.phoneNumber = req.body.phoneNumber,
     business.category = req.body.category,
     business.subcategory = req.body.subcategory
+    business.website = req.body.website
+    business.email = req.body.email
     res.json(business);
   } else {
+    console.log('Business not found')
+    res.status(404).send('Business not found');
+  }
+});
+
+// Delete a business
+app.delete('/businesses/:id', (req, res) => {
+  const id = req.params.id;
+  const business = businesses.find(business => business.id === id);
+  if (business) {
+    businesses.pop(business)
+    console.log('Business deleted')
+    res.send('Business deleted');
+  } else {
+    console.log('Business not found')
     res.status(404).send('Business not found');
   }
 });
