@@ -50,7 +50,7 @@ app.post('/businesses', (req, res) => {
 
 // Update a business
 app.put('/businesses/:id', (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   const business = businesses.find(business => business.id === id);
   if (business) {
     business.name = req.body.name;
