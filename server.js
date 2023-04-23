@@ -86,7 +86,7 @@ app.get('/businesses/:id', (req, res) => {
   const id = req.params.id;
   const business = businesses.find(business => business.id === id);
   if (business) {
-    res.send(`Info for ${business.name}`);
+    res.json(business)
   } else {
     res.status(404).send('Business not found');
   }
