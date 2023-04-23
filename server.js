@@ -6,6 +6,8 @@ const app = express()
 const port = 3000
 
 let businesses = [
+
+  // Test business
   {
   id: "owo",
   name:"Luke Inc.", 
@@ -17,7 +19,8 @@ let businesses = [
   category:"Technology", 
   subcategory:"Software",
   website:"lukereynoldspi.github.io",
-  email:"lukereynoldspi@gmail.com"}
+  email:"lukereynoldspi@gmail.com"
+  }
 ];
 
 app.use(cors());
@@ -92,7 +95,7 @@ app.get('/businesses/:id', (req, res) => {
   }
 });
 
-// Get all businesses
+// Get all businesses' info
 app.get('/businesses', (req, res) => {
   console.log('Looking at all businesses...')
   res.json(businesses);
@@ -103,6 +106,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Luke Reynolds Business API!')
 })
 
+// Current port number in console
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
