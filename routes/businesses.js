@@ -18,6 +18,7 @@ let businesses = [
     website: 'lukereynoldspi.github.io',
     email: 'lukereynoldspi@gmail.com',
     reviews: [],
+    photos: [],
   },
 ];
 
@@ -53,6 +54,7 @@ router.post('/', (req, res) => {
     website: req.body.website || '',
     email: req.body.email || '',
     reviews: [],
+    photos: []
   };
 
   businesses.push(business);
@@ -64,12 +66,16 @@ router.post('/:businessId/reviews', (req, res) => {
   const businessId = req.params.businessId;
   const business = businesses.find((b) => b.businessId === businessId);
 
-  if (!business) {
+  if (!business ) {
     return res.status(404).send('Business not found');
   }
 
+  else if (business.reviews.length >= 1) {
+    return res.status(404).send('Review already added');
+  }
+
+  else {
   const review = {
-    userId: req.body.userId,
     rating: req.body.rating,
     budget: req.body.budget,
 
@@ -79,6 +85,25 @@ router.post('/:businessId/reviews', (req, res) => {
 
   business.reviews.push(review);
   res.send('Review is added to the business');
+  }
+});
+
+// Add a photo
+router.post('/:businessId/photos', (req, res) => {
+  const businessId = req.params.businessId;
+  const business = businesses.find((b) => b.businessId === businessId);
+
+  if (!business) {
+    return res.status(404).send('Business not found');
+  }
+
+  const photo= {
+    photoURL: req.body.photoURL,
+    caption: req.body.caption,
+    };
+
+  business.photos.push(photo);
+  res.send('Photo is added to the business');
 });
 
 // Update a business
@@ -116,6 +141,19 @@ router.delete('/:businessId', (req, res) => {
       res.status(404).send('Business not found');
     }
   }
+);
+
+// Delete a review
+router.delete('/:businessId/reviews', (req, res) => {
+  const businessId = req.params.businessId;
+  const business = businesses.find(business => business.businessId === businessId);
+  if (business) {
+    businesses.reviews.pop()
+    res.send('Review deleted');
+  } else {
+    res.status(404).send('Business not found');
+  }
+}
 );
 
 module.exports = router;
