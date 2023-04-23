@@ -19,9 +19,13 @@ let businesses = [
   category:"Technology", 
   subcategory:"Software",
   website:"lukereynoldspi.github.io",
-  email:"lukereynoldspi@gmail.com"
+  email:"lukereynoldspi@gmail.com",
+  reviews:[]
   }
 ];
+
+
+let users = []
 
 app.use(cors());
 
@@ -45,10 +49,33 @@ app.post('/businesses', (req, res) => {
     // Optional parameters
     website: req.body.website || '',
     email: req.body.email || '',
+    reviews: []
   };
   
   businesses.push(business);
   res.send('Business is added to the database');
+});
+
+// Add a review
+app.post('/businesses/:id/reviews', (req, res) => {
+  const businessId = req.params.id;
+  const business = businesses.find(b => b.id === businessId);
+  
+  if (!business) {
+    return res.status(404).send('Business not found');
+  }
+
+  const review = {
+    userId: req.body.userId,
+    rating: req.body.rating,
+    budget: req.body.budget,
+
+    // Optional review
+    reviewText: req.body.reviewText || '',
+  };
+  
+  business.reviews.push(review);
+  res.send('Review is added to the business');
 });
 
 // Update a business
@@ -84,7 +111,7 @@ app.delete('/businesses/:id', (req, res) => {
   }
 });
 
-// Get info from id
+// Get business info from id
 app.get('/businesses/:id', (req, res) => {
   const id = req.params.id;
   const business = businesses.find(business => business.id === id);
@@ -95,7 +122,7 @@ app.get('/businesses/:id', (req, res) => {
   }
 });
 
-// Get all businesses' info
+// Get all businesses' info and reviews
 app.get('/businesses', (req, res) => {
   console.log('Looking at all businesses...')
   res.json(businesses);
