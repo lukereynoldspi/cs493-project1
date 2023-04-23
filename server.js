@@ -45,7 +45,6 @@ app.post('/businesses', (req, res) => {
   };
   
   businesses.push(business);
-  console.log(businesses);
   res.send('Business is added to the database');
 });
 
@@ -66,7 +65,6 @@ app.put('/businesses/:id', (req, res) => {
     business.email = req.body.email
     res.json(business);
   } else {
-    console.log('Business not found')
     res.status(404).send('Business not found');
   }
 });
@@ -77,18 +75,27 @@ app.delete('/businesses/:id', (req, res) => {
   const business = businesses.find(business => business.id === id);
   if (business) {
     businesses.pop(business)
-    console.log('Business deleted')
     res.send('Business deleted');
   } else {
-    console.log('Business not found')
+    res.status(404).send('Business not found');
+  }
+});
+
+// Get info from id
+app.get('/businesses/:id', (req, res) => {
+  const id = req.params.id;
+  const business = businesses.find(business => business.id === id);
+  if (business) {
+    res.send(`Info for ${business.name}`);
+  } else {
     res.status(404).send('Business not found');
   }
 });
 
 // Get all businesses
 app.get('/businesses', (req, res) => {
-  res.json(businesses);
   console.log('Looking at all businesses...')
+  res.json(businesses);
 });
 
 // Welcome message
