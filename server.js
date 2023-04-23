@@ -9,28 +9,29 @@ let users = [
 
   // Test user
   {
-    userId: "Carl",
+    userId: "Guts",
     businesses: [],
     reviews: [],
     photos: []
   }
-]
+];
 
 let businesses = [
 
   // Test business
   {
   businessId: "owo",
-  name:"Luke Inc.", 
-  address:"Bruh Rd.", 
-  city:"Bend", 
-  state:"OR", 
-  zipCode:"12345", 
-  phoneNumber:"(541) 555-5555", 
-  category:"Technology", 
-  subcategory:"Software",
-  website:"lukereynoldspi.github.io",
-  email:"lukereynoldspi@gmail.com",
+  owner: "Luke Reynolds",
+  name: "Luke Inc.", 
+  address: "Bruh Rd.", 
+  city: "Bend", 
+  state: "OR", 
+  zipCode: "12345", 
+  phoneNumber: "(541) 555-5555", 
+  category: "Technology", 
+  subcategory: "Software",
+  website: "lukereynoldspi.github.io",
+  email: "lukereynoldspi@gmail.com",
   reviews:[]
   }
 ];
@@ -41,10 +42,24 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// Add a user
+app.post('/users', (req, res) => {
+  const user = {
+    userId: req.body.userId,
+    businesses: [],
+    reviews: [],
+    photos: []
+  };
+  
+  users.push(user);
+  res.send('User is added to the user database');
+});
+
 // Add a business
 app.post('/businesses', (req, res) => {
   const business = {
     businessId: shortid.generate(),
+    owner: req.body.owner,
     name: req.body.name,
     address: req.body.address,
     city: req.body.city,
@@ -61,7 +76,7 @@ app.post('/businesses', (req, res) => {
   };
   
   businesses.push(business);
-  res.send('Business is added to the database');
+  res.send('Business is added to the business database');
 });
 
 // Add a review
@@ -113,6 +128,7 @@ app.put('/businesses/:businessId', (req, res) => {
   const businessId = req.params.businessId;
   const business = businesses.find(business => business.businessId === businessId);
   if (business) {
+    business.owner = req.body.owner,
     business.name = req.body.name;
     business.address = req.body.address,
     business.city = req.body.city,
@@ -141,6 +157,30 @@ app.delete('/businesses/:businessId', (req, res) => {
   }
 });
 
+// Get all user info
+app.get('/users', (req, res) => {
+  console.log('Looking at all users...')
+  res.json(users);
+});
+
+// Get all user business info
+app.get('/users/:userId/businesses', (req, res) => {
+  console.log('Looking at all user businesses...')
+  res.json(businesses);
+});
+
+// Get all user reviews
+app.get('/users/:userId/reviews', (req, res) => {
+  console.log('Looking at all user reviews...')
+  res.json(businesses);
+});
+
+// Get all user photos
+app.get('/users/:userId/photos', (req, res) => {
+  console.log('Looking at all user photos...')
+  res.json(businesses);
+});
+
 // Get business info from id
 app.get('/businesses/:businessId', (req, res) => {
   const businessId = req.params.businessId;
@@ -152,15 +192,9 @@ app.get('/businesses/:businessId', (req, res) => {
   }
 });
 
-// Get all businesses' info and reviews
-app.get('/businesses', (req, res) => {
-  console.log('Looking at all businesses...')
-  res.json(businesses);
-});
-
 // Welcome message
 app.get('/', (req, res) => {
-  res.send('Welcome to the Luke Reynolds Business API!')
+  res.send('Welcome to the Luke Reynolds Project 1 API!')
 })
 
 // Current port number in console
