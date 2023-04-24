@@ -24,19 +24,41 @@ let businesses = [
 
 // Get business info from id
 router.get('/:businessId', (req, res) => {
-    const businessId = req.params.businessId;
-    const business = businesses.find(business => business.businessId === businessId);
-    if (business) {
-      res.json(business)
-    } else {
-      res.status(404).send('Business not found');
-    }
-  });
+  const businessId = req.params.businessId;
+  const business = businesses.find(business => business.businessId === businessId);
+  if (business) {
+    res.json(business)
+  } else {
+    res.status(404).send('Business not found');
+  }
+});
+
+// Get business reviews from id
+router.get('/:businessId/reviews', (req, res) => {
+  const businessId = req.params.businessId;
+  const business = businesses.find(business => business.businessId === businessId);
+  if (business) {
+    res.json(business.reviews)
+  } else {
+    res.status(404).send('Business not found');
+  }
+});
+
+// Get business photos from id
+router.get('/:businessId/photos', (req, res) => {
+  const businessId = req.params.businessId;
+  const business = businesses.find(business => business.businessId === businessId);
+  if (business) {
+    res.json(business.photos)
+  } else {
+    res.status(404).send('Business not found');
+  }
+});
 
 // Get all businesses info
 router.get('/', (req, res) => {
-    res.json(businesses)
-  });
+  res.json(businesses)
+});
 
 // Add a business
 router.post('/', (req, res) => {
@@ -82,7 +104,6 @@ router.post('/:businessId/reviews', (req, res) => {
     // Optional review
     reviewText: req.body.reviewText || '',
     };
-
   business.reviews.push(review);
   res.send('Review is added to the business');
   }
