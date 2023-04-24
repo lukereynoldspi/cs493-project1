@@ -62,7 +62,7 @@ router.post('/', (req, res) => {
   };
 
   businesses.push(business);
-  res.send('Business is added to the business database');
+  res.send(business);
 });
 
 // Add a review
@@ -88,7 +88,7 @@ router.post('/:businessId/reviews', (req, res) => {
     reviewText: req.body.reviewText || '',
     };
   business.reviews.push(review);
-  res.send('Review is added to the business');
+  res.send(review);
   }
 });
 
@@ -108,7 +108,7 @@ router.post('/:businessId/photos', (req, res) => {
     };
 
   business.photos.push(photo);
-  res.send('Photo is added to the business');
+  res.send(photo);
 });
 
 // Update a business

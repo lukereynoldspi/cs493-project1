@@ -1,0 +1,713 @@
+{
+	"info": {
+		"_postman_id": "b5652368-6a67-4ca4-af7d-e38ae83a7447",
+		"name": "CS 493 Project 1 Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add a business",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create a new business\", function () {\r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://localhost:3000/businesses\",\r",
+							"        method: \"POST\",\r",
+							"        header: {\r",
+							"            \"Content-Type\": \"application/json\"\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: \"raw\",\r",
+							"            raw: JSON.stringify({\r",
+							"                owner: \"Luke Reynolds\",\r",
+							"                name: \"Luke Inc.\",\r",
+							"                address: \"Bruh Rd.\",\r",
+							"                city: \"Bend\",\r",
+							"                state: \"OR\",\r",
+							"                zipCode: \"12345\",\r",
+							"                phoneNumber: \"(541) 555-5555\",\r",
+							"                category: \"Technology\",\r",
+							"                subcategory: \"Software\",\r",
+							"                website: \"lukereynoldspi.github.io\",\r",
+							"                email: \"lukereynoldspi@gmail.com\",\r",
+							"                reviews: [],\r",
+							"                photos: []\r",
+							"            })\r",
+							"        }\r",
+							"    }, function (err, res) {\r",
+							"        pm.expect(err).to.be.null;\r",
+							"        pm.expect(res).to.have.status(200);\r",
+							"        pm.expect(res.json()).to.have.property(\"owner\", \"Luke Reynolds\");\r",
+							"        pm.expect(res.json()).to.have.property(\"name\", \"Luke Inc.\");\r",
+							"        pm.expect(res.json()).to.have.property(\"address\", \"Bruh Rd.\");\r",
+							"        pm.expect(res.json()).to.have.property(\"city\", \"Bend\");\r",
+							"        pm.expect(res.json()).to.have.property(\"state\", \"OR\");\r",
+							"        pm.expect(res.json()).to.have.property(\"zipCode\", \"12345\");\r",
+							"        pm.expect(res.json()).to.have.property(\"phoneNumber\", \"(541) 555-5555\");\r",
+							"        pm.expect(res.json()).to.have.property(\"category\", \"Technology\");\r",
+							"        pm.expect(res.json()).to.have.property(\"subcategory\", \"Software\");\r",
+							"        pm.expect(res.json()).to.have.property(\"website\", \"lukereynoldspi.github.io\");\r",
+							"        pm.expect(res.json()).to.have.property(\"email\", \"lukereynoldspi@gmail.com\");\r",
+							"        pm.expect(res.json()).to.have.property(\"reviews\").that.is.an(\"array\");\r",
+							"        pm.expect(res.json()).to.have.property(\"photos\").that.is.an(\"array\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/businesses",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"businesses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a review",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Add a review to a business\", function () {\r",
+							"    // Create a new business\r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://localhost:3000/businesses\",\r",
+							"        method: \"POST\",\r",
+							"        header: {\r",
+							"            \"Content-Type\": \"application/json\"\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: \"raw\",\r",
+							"            raw: JSON.stringify({\r",
+							"                owner: \"Luke Reynolds\",\r",
+							"                name: \"Luke Inc.\",\r",
+							"                address: \"Bruh Rd.\",\r",
+							"                city: \"Bend\",\r",
+							"                state: \"OR\",\r",
+							"                zipCode: \"12345\",\r",
+							"                phoneNumber: \"(541) 555-5555\",\r",
+							"                category: \"Technology\",\r",
+							"                subcategory: \"Software\",\r",
+							"                website: \"lukereynoldspi.github.io\",\r",
+							"                email: \"lukereynoldspi@gmail.com\",\r",
+							"                reviews: [],\r",
+							"                photos: []\r",
+							"            })\r",
+							"        }\r",
+							"    }, function (err, res) {\r",
+							"        pm.expect(err).to.be.null;\r",
+							"        pm.expect(res).to.have.status(200);\r",
+							"        pm.expect(res.json()).to.have.property(\"businessId\");\r",
+							"        var businessId = res.json().businessId;\r",
+							"\r",
+							"        // Add a review to the business\r",
+							"        pm.sendRequest({\r",
+							"            url: \"http://localhost:3000/businesses/\" + businessId + \"/reviews\",\r",
+							"            method: \"POST\",\r",
+							"            header: {\r",
+							"                \"Content-Type\": \"application/json\"\r",
+							"            },\r",
+							"            body: {\r",
+							"                mode: \"raw\",\r",
+							"                raw: JSON.stringify({\r",
+							"                    rating: 4,\r",
+							"                    budget: \"$$$\",\r",
+							"                    reviewText: \"Great service!\"\r",
+							"                })\r",
+							"            }\r",
+							"        }, function (err, res) {\r",
+							"            pm.expect(err).to.be.null;\r",
+							"            pm.expect(res).to.have.status(200);\r",
+							"            pm.expect(res.json()).to.have.property(\"rating\", 4);\r",
+							"            pm.expect(res.json()).to.have.property(\"budget\", \"$$$\");\r",
+							"            pm.expect(res.json()).to.have.property(\"reviewText\", \"Great service!\");\r",
+							"        });\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/businesses",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"businesses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a photo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Add a photo to a business\", function () {\r",
+							"    // Create a new business\r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://localhost:3000/businesses\",\r",
+							"        method: \"POST\",\r",
+							"        header: {\r",
+							"            \"Content-Type\": \"application/json\"\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: \"raw\",\r",
+							"            raw: JSON.stringify({\r",
+							"                owner: \"Luke Reynolds\",\r",
+							"                name: \"Luke Inc.\",\r",
+							"                address: \"Bruh Rd.\",\r",
+							"                city: \"Bend\",\r",
+							"                state: \"OR\",\r",
+							"                zipCode: \"12345\",\r",
+							"                phoneNumber: \"(541) 555-5555\",\r",
+							"                category: \"Technology\",\r",
+							"                subcategory: \"Software\",\r",
+							"                website: \"lukereynoldspi.github.io\",\r",
+							"                email: \"lukereynoldspi@gmail.com\",\r",
+							"                reviews: [],\r",
+							"                photos: []\r",
+							"            })\r",
+							"        }\r",
+							"    }, function (err, res) {\r",
+							"        pm.expect(err).to.be.null;\r",
+							"        pm.expect(res).to.have.status(200);\r",
+							"        pm.expect(res.json()).to.have.property(\"businessId\");\r",
+							"        var businessId = res.json().businessId;\r",
+							"\r",
+							"        // Add a review to the business\r",
+							"        pm.sendRequest({\r",
+							"            url: \"http://localhost:3000/businesses/\" + businessId + \"/photos\",\r",
+							"            method: \"POST\",\r",
+							"            header: {\r",
+							"                \"Content-Type\": \"application/json\"\r",
+							"            },\r",
+							"            body: {\r",
+							"                mode: \"raw\",\r",
+							"                raw: JSON.stringify({\r",
+							"                    photoURL: \"bruh.png\",\r",
+							"                    caption: \"wow thats amazing\",\r",
+							"                })\r",
+							"            }\r",
+							"        }, function (err, res) {\r",
+							"            pm.expect(err).to.be.null;\r",
+							"            pm.expect(res).to.have.status(200);\r",
+							"            pm.expect(res.json()).to.have.property(\"photoURL\", \"bruh.png\");\r",
+							"            pm.expect(res.json()).to.have.property(\"caption\", \"wow thats amazing\");\r",
+							"        });\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/businesses",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"businesses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get business info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get business info\", function () {\r",
+							"    // Create a new business\r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://localhost:3000/businesses\",\r",
+							"        method: \"POST\",\r",
+							"        header: {\r",
+							"            \"Content-Type\": \"application/json\"\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: \"raw\",\r",
+							"            raw: JSON.stringify({\r",
+							"                owner: \"Luke Reynolds\",\r",
+							"                name: \"Luke Inc.\",\r",
+							"                address: \"Bruh Rd.\",\r",
+							"                city: \"Bend\",\r",
+							"                state: \"OR\",\r",
+							"                zipCode: \"12345\",\r",
+							"                phoneNumber: \"(541) 555-5555\",\r",
+							"                category: \"Technology\",\r",
+							"                subcategory: \"Software\",\r",
+							"                website: \"lukereynoldspi.github.io\",\r",
+							"                email: \"lukereynoldspi@gmail.com\",\r",
+							"                reviews: [],\r",
+							"                photos: []\r",
+							"            })\r",
+							"        }\r",
+							"    }, function (err, res) {\r",
+							"        pm.expect(err).to.be.null;\r",
+							"        pm.expect(res).to.have.status(200);\r",
+							"        const business = res.json();\r",
+							"        pm.expect(business).to.have.property(\"owner\", \"Luke Reynolds\");\r",
+							"        pm.expect(business).to.have.property(\"name\", \"Luke Inc.\");\r",
+							"        pm.expect(business).to.have.property(\"address\", \"Bruh Rd.\");\r",
+							"        pm.expect(business).to.have.property(\"city\", \"Bend\");\r",
+							"        pm.expect(business).to.have.property(\"state\", \"OR\");\r",
+							"        pm.expect(business).to.have.property(\"zipCode\", \"12345\");\r",
+							"        pm.expect(business).to.have.property(\"phoneNumber\", \"(541) 555-5555\");\r",
+							"        pm.expect(business).to.have.property(\"category\", \"Technology\");\r",
+							"        pm.expect(business).to.have.property(\"subcategory\", \"Software\");\r",
+							"        pm.expect(business).to.have.property(\"website\", \"lukereynoldspi.github.io\");\r",
+							"        pm.expect(business).to.have.property(\"email\", \"lukereynoldspi@gmail.com\");\r",
+							"        pm.expect(business).to.have.property(\"reviews\").that.is.an(\"array\");\r",
+							"        pm.expect(business).to.have.property(\"photos\").that.is.an(\"array\");\r",
+							"\r",
+							"        // Get the newly created business\r",
+							"        pm.sendRequest({\r",
+							"            url: `http://localhost:3000/businesses/${business.businessId}`,\r",
+							"            method: \"GET\"\r",
+							"        }, function (err, res) {\r",
+							"            pm.expect(err).to.be.null;\r",
+							"            pm.expect(res).to.have.status(200);\r",
+							"            pm.expect(res.json()).to.deep.equal(business);\r",
+							"        });\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/businesses",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"businesses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get review info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get review info\", function () {\r",
+							"    // Create a new business\r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://localhost:3000/businesses\",\r",
+							"        method: \"POST\",\r",
+							"        header: {\r",
+							"            \"Content-Type\": \"application/json\"\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: \"raw\",\r",
+							"            raw: JSON.stringify({\r",
+							"                owner: \"Luke Reynolds\",\r",
+							"                name: \"Luke Inc.\",\r",
+							"                address: \"Bruh Rd.\",\r",
+							"                city: \"Bend\",\r",
+							"                state: \"OR\",\r",
+							"                zipCode: \"12345\",\r",
+							"                phoneNumber: \"(541) 555-5555\",\r",
+							"                category: \"Technology\",\r",
+							"                subcategory: \"Software\",\r",
+							"                website: \"lukereynoldspi.github.io\",\r",
+							"                email: \"lukereynoldspi@gmail.com\",\r",
+							"                reviews: [],\r",
+							"                photos: []\r",
+							"            })\r",
+							"        }\r",
+							"    }, function (err, res) {\r",
+							"        pm.expect(err).to.be.null;\r",
+							"        pm.expect(res).to.have.status(200);\r",
+							"        pm.expect(res.json()).to.have.property(\"businessId\");\r",
+							"        var businessId = res.json().businessId;\r",
+							"\r",
+							"        // Add a review to the business\r",
+							"        pm.sendRequest({\r",
+							"            url: \"http://localhost:3000/businesses/\" + businessId + \"/reviews\",\r",
+							"            method: \"POST\",\r",
+							"            header: {\r",
+							"                \"Content-Type\": \"application/json\"\r",
+							"            },\r",
+							"            body: {\r",
+							"                mode: \"raw\",\r",
+							"                raw: JSON.stringify({\r",
+							"                    rating: 4,\r",
+							"                    budget: \"$$$\",\r",
+							"                    reviewText: \"Great service!\"\r",
+							"                })\r",
+							"            }\r",
+							"        }, function (err, res) {\r",
+							"            pm.expect(err).to.be.null;\r",
+							"            pm.expect(res).to.have.status(200);\r",
+							"            pm.expect(res.json()).to.have.property(\"rating\", 4);\r",
+							"            pm.expect(res.json()).to.have.property(\"budget\", \"$$$\");\r",
+							"            pm.expect(res.json()).to.have.property(\"reviewText\", \"Great service!\");\r",
+							"\r",
+							"            // Get the reviews for the business\r",
+							"            pm.sendRequest({\r",
+							"                url: \"http://localhost:3000/businesses/\" + businessId + \"/reviews\",\r",
+							"                method: \"GET\",\r",
+							"                header: {\r",
+							"                    \"Content-Type\": \"application/json\"\r",
+							"                }\r",
+							"            }, function (err, res) {\r",
+							"                pm.expect(err).to.be.null;\r",
+							"                pm.expect(res).to.have.status(200);\r",
+							"                pm.expect(res.json()).to.be.an('array');\r",
+							"                pm.expect(res.json()[0]).to.have.property(\"rating\", 4);\r",
+							"                pm.expect(res.json()[0]).to.have.property(\"budget\", \"$$$\");\r",
+							"                pm.expect(res.json()[0]).to.have.property(\"reviewText\", \"Great service!\");\r",
+							"            });\r",
+							"        });\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/businesses",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"businesses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get photo info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get photo info\", function () {\r",
+							"    // Create a new business\r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://localhost:3000/businesses\",\r",
+							"        method: \"POST\",\r",
+							"        header: {\r",
+							"            \"Content-Type\": \"application/json\"\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: \"raw\",\r",
+							"            raw: JSON.stringify({\r",
+							"                owner: \"Luke Reynolds\",\r",
+							"                name: \"Luke Inc.\",\r",
+							"                address: \"Bruh Rd.\",\r",
+							"                city: \"Bend\",\r",
+							"                state: \"OR\",\r",
+							"                zipCode: \"12345\",\r",
+							"                phoneNumber: \"(541) 555-5555\",\r",
+							"                category: \"Technology\",\r",
+							"                subcategory: \"Software\",\r",
+							"                website: \"lukereynoldspi.github.io\",\r",
+							"                email: \"lukereynoldspi@gmail.com\",\r",
+							"                reviews: [],\r",
+							"                photos: []\r",
+							"            })\r",
+							"        }\r",
+							"    }, function (err, res) {\r",
+							"        pm.expect(err).to.be.null;\r",
+							"        pm.expect(res).to.have.status(200);\r",
+							"        pm.expect(res.json()).to.have.property(\"businessId\");\r",
+							"        var businessId = res.json().businessId;\r",
+							"\r",
+							"        // Add a photo to the business\r",
+							"        pm.sendRequest({\r",
+							"            url: \"http://localhost:3000/businesses/\" + businessId + \"/photos\",\r",
+							"            method: \"POST\",\r",
+							"            header: {\r",
+							"                \"Content-Type\": \"application/json\"\r",
+							"            },\r",
+							"            body: {\r",
+							"                mode: \"raw\",\r",
+							"                raw: JSON.stringify({\r",
+							"                    photoURL: \"bruh.png\",\r",
+							"                    caption: \"wow thats amazing\",\r",
+							"                })\r",
+							"            }\r",
+							"        }, function (err, res) {\r",
+							"            pm.expect(err).to.be.null;\r",
+							"            pm.expect(res).to.have.status(200);\r",
+							"            pm.expect(res.json()).to.have.property(\"photoURL\", \"bruh.png\");\r",
+							"            pm.expect(res.json()).to.have.property(\"caption\", \"wow thats amazing\");\r",
+							"\r",
+							"            // Get the photo for the business\r",
+							"            pm.sendRequest({\r",
+							"                url: \"http://localhost:3000/businesses/\" + businessId + \"/photos\",\r",
+							"                method: \"GET\",\r",
+							"                header: {\r",
+							"                    \"Content-Type\": \"application/json\"\r",
+							"                }\r",
+							"            }, function (err, res) {\r",
+							"                pm.expect(err).to.be.null;\r",
+							"                pm.expect(res).to.have.status(200);\r",
+							"                pm.expect(res.json()[0]).to.have.property(\"photoURL\", \"bruh.png\");\r",
+							"                pm.expect(res.json()[0]).to.have.property(\"caption\", \"wow thats amazing\");\r",
+							"            });\r",
+							"        });\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/businesses",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"businesses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put business data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Update an existing business\", function () {\r",
+							"    // Create a new business\r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://localhost:3000/businesses\",\r",
+							"        method: \"POST\",\r",
+							"        header: {\r",
+							"            \"Content-Type\": \"application/json\"\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: \"raw\",\r",
+							"            raw: JSON.stringify({\r",
+							"                owner: \"Luke Reynolds\",\r",
+							"                name: \"Luke Inc.\",\r",
+							"                address: \"Bruh Rd.\",\r",
+							"                city: \"Bend\",\r",
+							"                state: \"OR\",\r",
+							"                zipCode: \"12345\",\r",
+							"                phoneNumber: \"(541) 555-5555\",\r",
+							"                category: \"Technology\",\r",
+							"                subcategory: \"Software\",\r",
+							"                website: \"lukereynoldspi.github.io\",\r",
+							"                email: \"lukereynoldspi@gmail.com\",\r",
+							"                reviews: [],\r",
+							"                photos: []\r",
+							"            })\r",
+							"        }\r",
+							"    }, function (err, res) {\r",
+							"        pm.expect(err).to.be.null;\r",
+							"        pm.expect(res).to.have.status(200);\r",
+							"        pm.expect(res.json()).to.have.property(\"businessId\");\r",
+							"        var businessId = res.json().businessId;\r",
+							"\r",
+							"        // Update the business\r",
+							"        pm.sendRequest({\r",
+							"            url: \"http://localhost:3000/businesses/\" + businessId,\r",
+							"            method: \"PUT\",\r",
+							"            header: {\r",
+							"                \"Content-Type\": \"application/json\"\r",
+							"            },\r",
+							"            body: {\r",
+							"                mode: \"raw\",\r",
+							"                raw: JSON.stringify({\r",
+							"                    owner: \"Luke Reynolds\",\r",
+							"                    name: \"New Name Inc.\",\r",
+							"                    address: \"Bruh Rd.\",\r",
+							"                    city: \"Bend\",\r",
+							"                    state: \"OR\",\r",
+							"                    zipCode: \"12345\",\r",
+							"                    phoneNumber: \"(541) 555-5555\",\r",
+							"                    category: \"Technology\",\r",
+							"                    subcategory: \"Software\",\r",
+							"                    website: \"lukereynoldspi.github.io\",\r",
+							"                    email: \"lukereynoldspi@gmail.com\",\r",
+							"                    reviews: [],\r",
+							"                    photos: []\r",
+							"                })\r",
+							"            }\r",
+							"        }, function (err, res) {\r",
+							"            pm.expect(err).to.be.null;\r",
+							"            pm.expect(res).to.have.status(200);\r",
+							"            pm.expect(res.json()).to.have.property(\"name\", \"New Name Inc.\");\r",
+							"        });\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/businesses",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"businesses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete business",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Delete business\", function () {\r",
+							"    // Create a new business\r",
+							"    pm.sendRequest({\r",
+							"        url: \"http://localhost:3000/businesses\",\r",
+							"        method: \"POST\",\r",
+							"        header: {\r",
+							"            \"Content-Type\": \"application/json\"\r",
+							"        },\r",
+							"        body: {\r",
+							"            mode: \"raw\",\r",
+							"            raw: JSON.stringify({\r",
+							"                owner: \"Luke Reynolds\",\r",
+							"                name: \"Luke Inc.\",\r",
+							"                address: \"Bruh Rd.\",\r",
+							"                city: \"Bend\",\r",
+							"                state: \"OR\",\r",
+							"                zipCode: \"12345\",\r",
+							"                phoneNumber: \"(541) 555-5555\",\r",
+							"                category: \"Technology\",\r",
+							"                subcategory: \"Software\",\r",
+							"                website: \"lukereynoldspi.github.io\",\r",
+							"                email: \"lukereynoldspi@gmail.com\",\r",
+							"                reviews: [],\r",
+							"                photos: []\r",
+							"            })\r",
+							"        }\r",
+							"    }, function (err, res) {\r",
+							"        pm.expect(err).to.be.null;\r",
+							"        pm.expect(res).to.have.status(200);\r",
+							"        const business = res.json();\r",
+							"        pm.expect(business).to.have.property(\"owner\", \"Luke Reynolds\");\r",
+							"        pm.expect(business).to.have.property(\"name\", \"Luke Inc.\");\r",
+							"        pm.expect(business).to.have.property(\"address\", \"Bruh Rd.\");\r",
+							"        pm.expect(business).to.have.property(\"city\", \"Bend\");\r",
+							"        pm.expect(business).to.have.property(\"state\", \"OR\");\r",
+							"        pm.expect(business).to.have.property(\"zipCode\", \"12345\");\r",
+							"        pm.expect(business).to.have.property(\"phoneNumber\", \"(541) 555-5555\");\r",
+							"        pm.expect(business).to.have.property(\"category\", \"Technology\");\r",
+							"        pm.expect(business).to.have.property(\"subcategory\", \"Software\");\r",
+							"        pm.expect(business).to.have.property(\"website\", \"lukereynoldspi.github.io\");\r",
+							"        pm.expect(business).to.have.property(\"email\", \"lukereynoldspi@gmail.com\");\r",
+							"        pm.expect(business).to.have.property(\"reviews\").that.is.an(\"array\");\r",
+							"        pm.expect(business).to.have.property(\"photos\").that.is.an(\"array\");\r",
+							"\r",
+							"        // Delete the newly created business\r",
+							"        pm.sendRequest({\r",
+							"            url: `http://localhost:3000/businesses/${business.businessId}`,\r",
+							"            method: \"DELETE\"\r",
+							"        }, function (err, res) {\r",
+							"            pm.expect(err).to.be.null;\r",
+							"            pm.expect(res).to.have.status(200);\r",
+							"            pm.expect(res.text()).to.equal(\"Business deleted\");\r",
+							"        });\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/businesses",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"businesses"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
