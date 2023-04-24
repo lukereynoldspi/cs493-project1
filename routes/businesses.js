@@ -2,25 +2,7 @@ const express = require('express');
 const shortid = require('shortid');
 const router = express.Router();
 
-let businesses = [
-  // Test business
-  {
-    businessId: 'owo',
-    owner: 'Luke Reynolds',
-    name: 'Luke Inc.',
-    address: 'Bruh Rd.',
-    city: 'Bend',
-    state: 'OR',
-    zipCode: '12345',
-    phoneNumber: '(541) 555-5555',
-    category: 'Technology',
-    subcategory: 'Software',
-    website: 'lukereynoldspi.github.io',
-    email: 'lukereynoldspi@gmail.com',
-    reviews: [],
-    photos: [],
-  },
-];
+let businesses = [];
 
 // Get business info from id
 router.get('/:businessId', (req, res) => {
