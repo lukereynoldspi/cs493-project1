@@ -98,6 +98,7 @@ router.post('/:businessId/reviews', (req, res) => {
 
   else {
   const review = {
+    reviewId: shortid.generate(),
     rating: req.body.rating,
     budget: req.body.budget,
 
@@ -150,6 +151,26 @@ router.put('/:businessId', (req, res) => {
     }
   }
 );
+
+// Update a review
+router.put('/:businessId/reviews/:reviewId', (req, res) => {
+  const businessId = req.params.businessId;
+  const reviewId = req.params.reviewId;
+  const business = businesses.find(business => business.businessId === businessId);
+  if (business) {
+    const review = business.reviews.find(review => review.reviewId === reviewId);
+    if (review) {
+      review.rating = req.body.rating,
+      review.budget = req.body.budget,
+      review.reviewText = req.body.reviewText,
+      res.json(review);
+    } else {
+      res.status(404).send('Review not found');
+    }
+  } else {
+    res.status(404).send('Business not found');
+  }
+});
 
 // Delete a business
 router.delete('/:businessId', (req, res) => {
