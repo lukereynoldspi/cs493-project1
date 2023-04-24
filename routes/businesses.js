@@ -217,4 +217,17 @@ router.delete('/:businessId/reviews', (req, res) => {
 }
 );
 
+// Delete a photo
+router.delete('/:businessId/photos/:photoId', (req, res) => {
+  const businessId = req.params.businessId;
+  const photoId = req.params.photoId;
+  const business = businesses.find(business => business.businessId === businessId);
+  if (business) {
+    business.photos = business.photos.filter(photo => photo.photoId !== photoId);
+    res.send('Photo deleted');
+  } else {
+    res.status(404).send('Business not found');
+  }
+});
+
 module.exports = router;
