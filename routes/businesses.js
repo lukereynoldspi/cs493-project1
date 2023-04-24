@@ -120,6 +120,7 @@ router.post('/:businessId/photos', (req, res) => {
   }
 
   const photo= {
+    photoId: shortid.generate(),
     photoURL: req.body.photoURL,
     caption: req.body.caption,
     };
@@ -166,6 +167,24 @@ router.put('/:businessId/reviews/:reviewId', (req, res) => {
       res.json(review);
     } else {
       res.status(404).send('Review not found');
+    }
+  } else {
+    res.status(404).send('Business not found');
+  }
+});
+
+// Update photos
+router.put('/:businessId/photos/:photoId', (req, res) => {
+  const businessId = req.params.businessId;
+  const photoId = req.params.photoId;
+  const business = businesses.find(business => business.businessId === businessId);
+  if (business) {
+    const photo = business.photos.find(photo => photo.photoId === photoId);
+    if (photo) {
+      photo.caption = req.body.caption,
+      res.json(photo);
+    } else {
+      res.status(404).send('Photo not found');
     }
   } else {
     res.status(404).send('Business not found');
